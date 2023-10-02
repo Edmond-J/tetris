@@ -6,7 +6,7 @@ public class Tetris {
 	final static int WIDTH = 40;
 	Color exist[][]=new Color[10][20];
 	Block block;
-	LType lt=new LType();
+//	LType lt=new LType();
 
 	public Tetris() {
 		initialize();

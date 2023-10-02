@@ -1,4 +1,3 @@
-import ecs100.UI;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -18,48 +17,67 @@ public class TetrisFx extends Application {
 	final static int WIDTH = 40;
 	Color exist[][] = new Color[10][20];
 	Pane grid = new Pane();
-	LType lt = new LType();
+	Block curBlock = new Block();
+	Pane controlBlock;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			drawGrid();
 			Pane container = new Pane();
-			Pane controlBlock = lt.rotate();
+			controlBlock = curBlock.drawBlock();
 			container.getChildren().addAll(grid, controlBlock);
 			Scene scene = new Scene(container, 10*WIDTH, 20*WIDTH);
 			KeyFrame frame = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent t) {
-					lt.baseY += 1;
-					for (Node rec : controlBlock.getChildren()) {
-						rec.setTranslateY(WIDTH*lt.baseY);
+					if (!curBlock.isContact(exist)) {
+						curBlock.baseY += 1;
+						for (Node rec : controlBlock.getChildren()) {
+							rec.setTranslateY(rec.getTranslateY()+WIDTH);
+//						rec.setTranslateX(WIDTH*lt.baseX);
+						}
+					} else {
+						exist = curBlock.executeClearance();
+						curBlock = new Block();
+						controlBlock = curBlock.drawBlock();
+						container.getChildren().add(controlBlock);
 					}
 				}
 			});
 			scene.setOnKeyPressed(e -> {
 				if (e.getCode() == KeyCode.LEFT) {
-					lt.baseX -= 1;
+					curBlock.baseX -= 1;
 					for (Node rec : controlBlock.getChildren()) {
-						rec.setTranslateX(WIDTH*lt.baseX);
+						rec.setTranslateX(rec.getTranslateX()-WIDTH);
 					}
-				}
-				else if (e.getCode() == KeyCode.DOWN) {
-					lt.baseY += 1;
+				} else if (e.getCode() == KeyCode.DOWN) {
+					if (!curBlock.isContact(exist)) {
+						curBlock.baseY += 1;
+						for (Node rec : controlBlock.getChildren()) {
+							rec.setTranslateY(rec.getTranslateY()+WIDTH);
+//						rec.setTranslateX(WIDTH*lt.baseX);
+						}
+					} else {
+						exist = curBlock.executeClearance();
+						curBlock = new Block();
+						controlBlock = curBlock.drawBlock();
+						container.getChildren().add(controlBlock);
+					}
+				} else if (e.getCode() == KeyCode.RIGHT) {
+					curBlock.baseX += 1;
 					for (Node rec : controlBlock.getChildren()) {
-						rec.setTranslateY(WIDTH*lt.baseY);
+						rec.setTranslateX(rec.getTranslateX()+WIDTH);
 					}
-				}
-				else if (e.getCode() == KeyCode.RIGHT) {
-					lt.baseX += 1;
-					for (Node rec : controlBlock.getChildren()) {
-						rec.setTranslateX(WIDTH*lt.baseX);
-					}
-				}
-				if (e.getCode() == KeyCode.SPACE) {
+				} else if (e.getCode() == KeyCode.SPACE) {
 //					lt.rotate();
 					controlBlock.getChildren().clear();
-					controlBlock.getChildren().add(lt.rotate());
+					controlBlock.getChildren().add(curBlock.drawBlock());
+					
+//					for (Node rec : controlBlock.getChildren()) {
+//						rec.setTranslateY(WIDTH*lt.baseY);
+//						rec.setTranslateX(WIDTH*lt.baseX);
+//					}
 				}
 			});
 			Timeline timeline = new Timeline();
@@ -97,6 +115,9 @@ public class TetrisFx extends Application {
 				}
 			}
 		}
+	}
+
+	public void executeClearance() {
 	}
 
 	public static void main(String[] args) {
