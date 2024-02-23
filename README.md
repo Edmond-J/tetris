@@ -7,7 +7,7 @@ Find the executable application (number_guessing-fx.exe) from Google Drive:
 [Edmond's Java Program Collection.zip (Windows)](https://drive.google.com/file/d/1ve7sEscvtVldRKZU-B3VhaQdORteksQk/view?usp=drive_link)
 
 ## Snapshot
-<img src="screenshot/ui-1.png" style="max-width: 25%"> 
+<img src="screenshot/ui-1.png" width="400px" style="max-width: 25%"> 
 
 ## Hot Keys
 **Left/Right**: move left or right  
