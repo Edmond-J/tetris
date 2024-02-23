@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class TetrisFx extends Application {
+public class TetrisFx_Main extends Application {
 	final static int WIDTH = 40;
 	Color exist[][] = new Color[10][20];
 	Pane grid = new Pane();
@@ -25,7 +25,7 @@ public class TetrisFx extends Application {
 		try {
 			drawGrid();
 			Pane container = new Pane();
-			controlBlock = curBlock.drawBlock();
+			controlBlock = curBlock.drawBlock(exist);
 			container.getChildren().addAll(grid, controlBlock);
 			Scene scene = new Scene(container, 10*WIDTH, 20*WIDTH);
 			KeyFrame frame = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
@@ -40,7 +40,7 @@ public class TetrisFx extends Application {
 					} else {
 						exist = curBlock.executeClearance();
 						curBlock = new Block();
-						controlBlock = curBlock.drawBlock();
+						controlBlock = curBlock.drawBlock(exist);
 						container.getChildren().add(controlBlock);
 					}
 				}
@@ -52,18 +52,17 @@ public class TetrisFx extends Application {
 						rec.setTranslateX(rec.getTranslateX()-WIDTH);
 					}
 				} else if (e.getCode() == KeyCode.DOWN) {
-					if (!curBlock.isContact(exist)) {
+					while (!curBlock.isContact(exist)) {
 						curBlock.baseY += 1;
 						for (Node rec : controlBlock.getChildren()) {
 							rec.setTranslateY(rec.getTranslateY()+WIDTH);
-//						rec.setTranslateX(WIDTH*lt.baseX);
 						}
-					} else {
+					} 
 						exist = curBlock.executeClearance();
 						curBlock = new Block();
-						controlBlock = curBlock.drawBlock();
+						controlBlock = curBlock.drawBlock(exist);
 						container.getChildren().add(controlBlock);
-					}
+					
 				} else if (e.getCode() == KeyCode.RIGHT) {
 					curBlock.baseX += 1;
 					for (Node rec : controlBlock.getChildren()) {
@@ -72,12 +71,8 @@ public class TetrisFx extends Application {
 				} else if (e.getCode() == KeyCode.SPACE) {
 //					lt.rotate();
 					controlBlock.getChildren().clear();
-					controlBlock.getChildren().add(curBlock.drawBlock());
+					controlBlock.getChildren().add(curBlock.drawBlock(exist));
 					
-//					for (Node rec : controlBlock.getChildren()) {
-//						rec.setTranslateY(WIDTH*lt.baseY);
-//						rec.setTranslateX(WIDTH*lt.baseX);
-//					}
 				}
 			});
 			Timeline timeline = new Timeline();

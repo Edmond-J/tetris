@@ -9,16 +9,19 @@ public class Block extends Rectangle {
 	int baseX;
 	int baseY = -2;
 	Pane controlBlock;
+	boolean isEngaged = false;
+	boolean pos[][];
 
 	public Block() {
 		pattern = Pattern.randomPat();
 //		pattern = Pattern.O;
 		direction = Direction.randomDir();
-		if (pattern == Pattern.I && direction == Direction.LEFT && direction == Direction.RIGHT)
-			baseX = 3;
-		else if (pattern == Pattern.I && direction == Direction.UP && direction == Direction.DOWN)
-			baseX = 5;
-		else baseX = 4;
+//		if (pattern == Pattern.I && direction == Direction.LEFT && direction == Direction.RIGHT)
+//			baseX = 3;
+//		else if (pattern == Pattern.I && direction == Direction.UP && direction == Direction.DOWN)
+//			baseX = 5;
+//		else baseX = 4;
+		baseX = 4;
 	}
 
 	public void drop(Color exist[][]) {
@@ -26,32 +29,52 @@ public class Block extends Rectangle {
 			baseY += 1;
 		}
 	}
+
 // public void addExist(Color exist[][]) {
 //		for (int i = 0; i < 4; i++) {
 //			exist[x[i]][y[i]] = pattern.getColor();
 //		}
 //	}
-
 	public boolean isContact(Color exist[][]) {// 如果任何一块的下面挡着现有的块，则视为接触
+		if (baseY >= 17)
+			return true;
 		for (Node node : controlBlock.getChildren()) {
-			Rectangle rec=(Rectangle)node;
-//			System.out.println("trans"+rec.getTranslateY());
-//			System.out.println("Y"+rec.getY());
-//			System.out.println("lay"+rec.getLayoutY());
-			if(baseY>=17)
-				return true;
+			Rectangle rec = (Rectangle)node;
+//			System.out.println("y:"+rec.getY());
+//			System.out.println("lay:"+rec.getLayoutY());
 		}
 		return false;
 	}
+//	public boolean isContact(Color exist[][]) {// 如果任何一块的下面挡着现有的块，则视为接触
+//		for (int i = 0; i < 3; i++) {
+//			for (int j = 0; j < 3; j++) {
+//				if (pos[i][j]) {
+//					if (baseY+1 > 0) {
+//						if (exist[i+baseX][j+baseY+1] != null || baseY >= 17) {
+//							for (int k = 0; k < 3; k++) {
+//								for (int l = 0; l < 3; l++) {
+//									if (pos[k][l]) {
+//										exist[k+baseX][l+baseY] = pattern.getColor();
+//									}
+//								}
+//							}
+//						}
+//						return true;
+//					}
+//				}
+//			}
+//		}
+//		return false;
+//	}
 
 	public Color[][] executeClearance() {
 		return null;
 	}
-
-	public Pane drawBlock() {
-		boolean pos[][] = new boolean[3][3];
+	
+	public Pane drawBlock(Color exist[][]) {
+		pos = new boolean[3][3];
 		switch (pattern) {
-		case I -> { pattern = Pattern.J; drawBlock(); break; }// I型暂不可用
+//		case I -> { pattern = Pattern.J; drawBlock(); break; }// I型暂不可用
 		case O -> { pos = rotateO(); break; }
 		case T -> { pos = rotateT(); break; }
 		case L -> { pos = rotateL(); break; }
@@ -64,13 +87,25 @@ public class Block extends Rectangle {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				if (pos[i][j]) {
-					Rectangle rec = new Rectangle((i+baseX)*Tetris.WIDTH+2, (j+baseY)*Tetris.WIDTH+2, Tetris.WIDTH-4,
-							Tetris.WIDTH-4);
+					Rectangle rec = new Rectangle((i+baseX)*TetrisFx_Main.WIDTH+2, (j+baseY)*TetrisFx_Main.WIDTH+2,
+							TetrisFx_Main.WIDTH-4, TetrisFx_Main.WIDTH-4);
 					rec.setFill(pattern.getColor());
+					controlBlock.getChildren().add(rec);
+//					if (baseY+1 > 0) {
+//						if (exist[i+baseX][j+baseY+1] != null || baseY >= 17) {
+//							isEngaged = true;
+//							for (int k = 0; k < 3; k++) {
+//								for (int l = 0; l < 3; l++) {
+//									if (pos[k][l]) {
+//										exist[k+baseX][l+baseY] = pattern.getColor();
+//									}
+//								}
+//							}
+//						}
+//					}
 //					rec.setTranslateX(0);
 //					rec.setTranslateY((j+baseY)*Tetris.WIDTH);
 //					recList.add(rec);
-					controlBlock.getChildren().add(rec);
 				}
 			}
 		}
