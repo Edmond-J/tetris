@@ -16,7 +16,7 @@ Find the executable application (tetris.exe) from Google Drive:
 
 ## Features
 - Blocks rotate in clockwise
-- Foldable setting panel.
+
 
 ## Tech Stack 
 | Type | Name |
@@ -30,12 +30,12 @@ Find the executable application (tetris.exe) from Google Drive:
 - Java Runtime Environment
 - Java FX
 ### Steps:   
-To run the application in your local machine, please follow the steps below:
+To run the source code in development environment, please follow the steps below:
 1. Clone the repository from the GitHub  
 2. Add JavaFX to Build Path
 3. Add the VM arguments to the run configure:  
 `--module-path "<PATH TO YOUR JavaFX/lib>" --add-modules javafx.controls,javafx.fxml`
-4. Run the *TetrisFx_Main.java* in the *application* package.
+4. Run the *TetrisFx_Main.java* in the default package.
 
 ## License
 MIT
